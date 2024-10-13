@@ -43,7 +43,7 @@ const pizzaData = [
     ingredients: "Tomato, mozarella, ham, aragula, and burrata cheese",
     price: 18,
     photoName: "pizzas/prosciutto.jpg",
-    soldOut: false,
+    soldOut: true,
   },
 ];
 
@@ -74,10 +74,40 @@ function Header() {
 }
 
 function Menu() {
+  const pizzas = pizzaData;
+  // const pizzas = [];
+  const numPizzas = pizzas.length;
+
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <Pizza
+
+      {/*Condisional Rendaring with Ternary  */}
+      {numPizzas > 0 ? (
+        //react fragment <> </>
+        <>
+          <p>
+            Authentic Italian cuisine. 6 creative dishes to choose from. All
+            from our stone oven, all oraganic, all delicious.
+          </p>
+
+          <ul className="pizzas">
+            {pizzaData.map((pizza) => (
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+              // <Pizza
+              //   name={pizza.name}
+              //   ingredients={pizza.ingredients}
+              //   photoName={pizza.photoName}
+              //   price={pizza.price}
+              // />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>We're still working on our menu. Please comeback later :) </p>
+      )}
+
+      {/* <Pizza
         name="Pizza Prosciutto"
         ingredients="Tomato, mozarella, ham, aragula, and burrata cheese"
         photoName="pizzas/prosciutto.jpg"
@@ -88,28 +118,30 @@ function Menu() {
         ingredients="Tomato, mozarella, and pepperoni"
         photoName="pizzas/salamino.jpg"
         price={12}
-      />
+      /> */}
     </main>
   );
 }
 
-function Pizza(props) {
-  console.log(props);
+function Pizza({ pizzaObj }) {
+  console.log(pizzaObj);
+  // if (pizzaObj.soldOut) return null;
+
   return (
-    <div className="pizza">
-      <img src={props.photoName} alt={props.name} />
+    <li className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredients}</p>
-        <span>{props.price + 3}</span>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        <span>{pizzaObj.soldOut ? "SOLD OUT!" : pizzaObj.price}</span>
       </div>
-    </div>
+    </li>
   );
 }
 
 function Footer() {
   const hour = new Date().getHours();
-  const openHour = 12;
+  const openHour = 10;
   const closeHour = 22;
   const isOpen = hour >= openHour && hour <= closeHour;
   console.log(isOpen);
@@ -119,7 +151,29 @@ function Footer() {
 
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()} We're currently open{" "}
+      {/* Condisional Rendaring && operator */}
+      {/* {isOpen && (
+        <div className="order">
+          <p>
+            We're open until {closeHour}:00 . Come visit us or order online.
+          </p>
+          <button className="btn">Order</button>
+        </div>
+      )} */}
+
+      {/*Condisional Rendaring with Ternary  */}
+      {isOpen ? (
+        <div className="order">
+          <p>
+            We're open until {closeHour}:00 . Come visit us or order online.
+          </p>
+          <button className="btn">Order</button>
+        </div>
+      ) : (
+        <p>
+          We're happy to wellcome you between {openHour}:00 and {closeHour}:00.
+        </p>
+      )}
     </footer>
   );
 
